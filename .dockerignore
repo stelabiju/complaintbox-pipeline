@@ -1,0 +1,13 @@
+.git
+.gitignore
+__pycache__
+*.py[cod]
+*.sqlite3
+.env
+.venv
+venv
+env
+.pytest_cache
+.idea
+.vscode
+
