@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: complaintbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: complaintbox
+  template:
+    metadata:
+      labels:
+        app: complaintbox
+    spec:
+      containers:
+        - name: complaintbox
+          image: stelabiju/complaintbox:v1
+          ports:
+            - containerPort: 8000
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
