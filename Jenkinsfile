@@ -101,7 +101,7 @@ pipeline {
         stage('Update Kubernetes Manifest') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'github-cred',
+                    credentialsId: 'Github_jenkins',
                     usernameVariable: 'GIT_USER',
                     passwordVariable: 'GIT_PASS'
                 )]) {
