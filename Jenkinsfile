@@ -36,6 +36,22 @@ pipeline {
             }
         }
 
+        stage('DAST Scan') {
+            steps {
+                sh '''
+                    docker rm -f complaintbox-dast || true
+                    docker run -d --name complaintbox-dast -p 8001:8000 $IMAGE
+                    sleep 10
+                    docker run --rm --add-host=host.docker.internal:host-gateway -v "$WORKSPACE:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://host.docker.internal:8001 -r zap-report.html
+                '''
+            }
+            post {
+                always {
+                    sh 'docker rm -f complaintbox-dast || true'
+                }
+            }
+        }
+
         stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
@@ -44,6 +60,12 @@ pipeline {
                     sh 'docker logout'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'zap-report.html', allowEmptyArchive: true
         }
     }
 }
