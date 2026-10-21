@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: complaintbox
-          image: stelabiju/complaintbox:v1
+          image: stelabiju/complaintbox:5
           ports:
             - containerPort: 8000
           securityContext:
